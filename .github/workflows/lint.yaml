@@ -1,6 +1,6 @@
 on: [push, pull_request]
 
-name: Linters check
+name: Lint
 
 jobs:
   lints:
