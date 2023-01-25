@@ -16,7 +16,7 @@ fn main() {
 }
 
 fn run(input: String) {
-    let tokens = input.split(" ");
+    let tokens = input.split(' ');
     print!("> Tokens:");
     for t in tokens {
         print!("\n{}", t);
