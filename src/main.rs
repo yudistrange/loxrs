@@ -1,16 +1,23 @@
+use std::fs::File;
 use std::io::stdin;
 use std::io::stdout;
+use std::io::Read;
 use std::io::Write;
+use std::path::Path;
+use std::process;
 
 fn main() {
-    let args = std::env::args();
-    let args_len = args.count();
+    let args: Vec<String> = std::env::args().collect();
+    let args_len = args.len();
     match args_len {
         1 => {
             println!("Starting lox interpreter...");
             run_prompt();
         } // `loxrs` is the always the first argument
-        2 => println!("Compiling"),             // accept one script
+        2 => {
+            println!("Compiling");
+            run_file(args[1].clone());
+        } // accept one script
         _ => println!("Usage: loxrs [script]"), // ignore more than 1 argument
     }
 }
@@ -40,5 +47,18 @@ fn run_prompt() {
                 break;
             }
         }
+    }
+}
+
+fn run_file(f_name: String) {
+    let mut file_contents = String::new();
+    match File::open(Path::new(f_name.as_str())) {
+        Ok(mut f) => match f.read_to_string(&mut file_contents) {
+            Ok(_) => {
+                run(file_contents);
+            }
+            Err(_) => println!("Failed to read file: {}", f_name),
+        },
+        Err(_) => println!("Failed to read file: {}", f_name),
     }
 }
